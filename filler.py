@@ -135,5 +135,5 @@ class Player:
 
 
 if __name__ == "__main__":
-    FILLER = Filler(number_of_colors=6, height=8, width=5)
+    FILLER = Filler(number_of_colors=8, height=12, width=8)
     FILLER.play()

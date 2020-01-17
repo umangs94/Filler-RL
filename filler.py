@@ -24,7 +24,7 @@ class FillerGame:
 
         return options
 
-    def play_full_game(self):
+    def play_automated_game(self):
         while self.player_1.score + self.player_2.score < self.number_of_squares:
             self.player_1.play_turn(self.get_color_options())
             self.player_2.play_turn(self.get_color_options())
@@ -98,4 +98,6 @@ class FillerBoard:
 
 if __name__ == "__main__":
     FILLER = FillerGame(number_of_colors=8, height=12, width=8)
-    FILLER.play_full_game()
+
+    if input('Enter "y" for AI vs. AI: ') == 'y':
+        FILLER.play_automated_game()

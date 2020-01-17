@@ -12,6 +12,7 @@ class Filler:
 
         self.board = np.random.randint(0, self.number_of_colors, (self.height, self.width))
         print(self.board)
+        print()
 
         self.player_1 = player.AIPlayer([[self.height - 1, 0]], self.board,
                                         self.height, self.width, self.number_of_colors)
@@ -21,23 +22,15 @@ class Filler:
     def get_color_options(self):
         return self.color_options[(self.color_options != self.player_1.current_value) & (self.color_options != self.player_2.current_value)]
 
-    def best_turn(self):
-        player_1_value = self.player_1.get_action(self.get_color_options(), self.board)
-        self.board = self.player_1.set_filled(player_1_value, self.board)
-
-        print(f"player 1 played {player_1_value}:  {self.player_1.score}")
-        print(self.board)
-
-        player_2_value = self.player_2.get_action(self.get_color_options(), self.board)
-        self.board = self.player_2.set_filled(player_2_value, self.board)
-
-        print(f"player 2 played {player_2_value}:  {self.player_2.score}")
-        print(self.board)
-        print()
-
     def play_full_game(self):
         while self.player_1.score + self.player_2.score < self.height * self.width:
-            self.best_turn()
+            self.board = self.player_1.play_turn(self.get_color_options(), self.board)
+            self.board = self.player_2.play_turn(self.get_color_options(), self.board)
+
+            print(f"player 1 played {self.player_1.current_value}:  {self.player_1.score}")
+            print(f"player 2 played {self.player_2.current_value}:  {self.player_2.score}")
+            print(self.board)
+            print()
 
         if self.player_1.score > self.player_2.score:
             print("player 1 wins")

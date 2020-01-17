@@ -68,6 +68,12 @@ class Player:
 
         return score
 
+    def play_turn(self, color_options, game_board):
+        value = self.get_action(color_options, game_board)
+        updated_game_board = self.set_filled(value, game_board)
+
+        return updated_game_board
+
     def get_action(self, color_options, game_board):
         raise NotImplementedError
 

@@ -24,7 +24,7 @@ class Player:
 class HumanPlayer(Player):
     def choose_color(self, color_options):
         print(f'Color option: {color_options}')
-        while(True):
+        while True:
             chosen_color = int(input('Choose a color: '))
             if chosen_color in color_options:
                 return chosen_color

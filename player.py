@@ -21,11 +21,23 @@ class Player:
         raise NotImplementedError
 
 
+class HumanPlayer(Player):
+    def choose_color(self, color_options):
+        print(f'Color option: {color_options}')
+        while(True):
+            chosen_color = int(input('Choose a color: '))
+            if chosen_color in color_options:
+                return chosen_color
+            else:
+                print('Invalid input.')
+
+
 class AIPlayer(Player):
     def choose_color(self, color_options):
         max_score = -1
         best_color = -1
 
+        np.random.shuffle(color_options)
         for color in color_options:
             simulated_game_board = copy.copy(self.game_board)
             simulated_filled = self.filled.copy()

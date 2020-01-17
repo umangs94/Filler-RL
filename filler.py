@@ -4,7 +4,7 @@ import player
 
 
 class FillerGame:
-    def __init__(self, number_of_colors, height, width):
+    def __init__(self, number_of_colors, height, width, automated=True):
         self.number_of_colors = number_of_colors
         self.number_of_squares = height * width
         self.color_options = np.arange(number_of_colors)
@@ -12,19 +12,19 @@ class FillerGame:
         self.game_board.output()
 
         player_1_starting_cell = (height - 1, 0)
-        self.player_1 = player.AIPlayer([player_1_starting_cell], self.game_board)
+        if automated:
+            self.player_1 = player.AIPlayer([player_1_starting_cell], self.game_board)
+        else:
+            self.player_1 = player.HumanPlayer([player_1_starting_cell], self.game_board)
 
         player_2_starting_cell = (0, width - 1)
         self.player_2 = player.AIPlayer([player_2_starting_cell], self.game_board)
 
     def get_color_options(self):
         mask = (self.color_options != self.player_1.color) & (self.color_options != self.player_2.color)
-        options = self.color_options[mask]
-        np.random.shuffle(options)
+        return self.color_options[mask]
 
-        return options
-
-    def play_automated_game(self):
+    def play(self):
         while self.player_1.score + self.player_2.score < self.number_of_squares:
             self.player_1.play_turn(self.get_color_options())
             self.player_2.play_turn(self.get_color_options())
@@ -97,7 +97,6 @@ class FillerBoard:
 
 
 if __name__ == "__main__":
-    FILLER = FillerGame(number_of_colors=8, height=12, width=8)
-
-    if input('Enter "y" for AI vs. AI: ') == 'y':
-        FILLER.play_automated_game()
+    AUTOMATED = input('Enter "y" for AI vs. AI: ') == 'y'
+    FILLER = FillerGame(number_of_colors=8, height=12, width=8, automated=AUTOMATED)
+    FILLER.play()

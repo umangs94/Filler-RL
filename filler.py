@@ -35,17 +35,17 @@ class Filler:
         player_1_value = self.player_1.get_best_action(self.get_color_options(), self.board)
         self.board = self.player_1.set_filled(player_1_value, self.board)
 
-        print("player 1: ", self.player_1.score)
+        print(f"player 1 played {player_1_value}:  {self.player_1.score}")
         print(self.board)
 
         player_2_value = self.player_2.get_best_action(self.get_color_options(), self.board)
         self.board = self.player_2.set_filled(player_2_value, self.board)
 
-        print("player 2: ", self.player_2.score)
+        print(f"player 2 played {player_2_value}:  {self.player_2.score}")
         print(self.board)
         print()
 
-    def play(self):
+    def play_full_game(self):
         while self.player_1.score + self.player_2.score < self.height * self.width:
             self.best_turn()
 
@@ -136,4 +136,4 @@ class Player:
 
 if __name__ == "__main__":
     FILLER = Filler(number_of_colors=8, height=12, width=8)
-    FILLER.play()
+    FILLER.play_full_game()

@@ -133,10 +133,10 @@ class FillerBoard:
         for mask, color in zip(masks, list(COLORS.values())[:self.number_of_colors]):
             output[mask] = color
 
-        output = np.repeat(np.repeat(output, 10, axis=0), 10, axis=1)
-        plt.imsave('image.png', output)
+        image = np.repeat(np.repeat(output, 10, axis=0), 10, axis=1)
+        plt.imsave('image.png', image)
 
-        plt.imshow(output)
+        plt.imshow(image)
         plt.show(block)
 
     def get_color(self, coord):

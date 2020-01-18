@@ -53,7 +53,7 @@ class FillerGame:
     def check_for_end_of_game(self):
         """
         Checks if the game is over.
-        The game is over if the players' scores are greater than the number of cells 
+        The game is over if the players' scores are greater than the number of cells \
         or if one of the players has a score greater than half the number of cells.
 
         Returns

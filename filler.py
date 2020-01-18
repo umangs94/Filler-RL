@@ -53,17 +53,26 @@ class FillerGame:
     def check_for_end_of_game(self):
         """
         Checks if the game is over.
-        The game is over if the players' scores are greater than the number of cells \
-        or if one of the players has a score greater than half the number of cells.
+        The game is over if the players' scores are greater than the number of cells.
 
         Returns
         -------
         bool
-            [description]
+            True if the game is over, False otherwise
         """
-        return (self.player_1.score + self.player_2.score >= self.number_of_cells) | \
-            (self.player_1.score > self.number_of_cells / 2) | \
-            (self.player_2.score > self.number_of_cells / 2)
+        return self.player_1.score + self.player_2.score >= self.number_of_cells
+
+    def check_for_early_finish(self):
+        """
+        Checks if the game can be finished early: if one of the players has a score greater \
+            than half the number of cells.
+
+        Returns
+        -------
+        bool
+            True if the game is over, False otherwise
+        """
+        return ((self.player_1.score > self.number_of_cells / 2) or (self.player_2.score > self.number_of_cells / 2))
 
     def play_single_turn(self):
         """
@@ -84,11 +93,16 @@ class FillerGame:
 
         return image
 
-    def play_game(self):
+    def play_game(self, early_finish=False):
         """
         Completes the entire game by playing turns until the game is over and then prints the result.
+
+        Parameters
+        ----------
+        early_finish : bool, optional
+            determines whether the game can be finished early, by default False
         """
-        while not self.check_for_end_of_game():
+        while not (self.check_for_end_of_game() or (early_finish and self.check_for_early_finish())):
             self.play_single_turn()
             if self.automated:
                 input('Press any key to continue.\n')

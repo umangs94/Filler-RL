@@ -1,3 +1,7 @@
+"""
+Contains the Player superclass and its subclasses.
+"""
+
 import copy
 import numpy as np
 
@@ -5,7 +9,21 @@ from filler import COLORS
 
 
 class Player:
+    """
+    A superclass to implement functions and variables for all players.
+    """
+
     def __init__(self, filled, game_board):
+        """
+        Initializes the player object.
+
+        Parameters
+        ----------
+        filled : list
+            a list of cells that belong to the player
+        game_board : FillerBoard
+            the gameboard object
+        """
         self.score = 1
         self.filled = filled
         self.game_board = game_board
@@ -14,17 +32,45 @@ class Player:
         self.game_board.update_filled(self.filled)
 
     def play_turn(self, color_options):
+        """
+        Plays a turn by choosing a color, setting it, updating the list of filled cells, and sets the score.
+
+        Parameters
+        ----------
+        color_options : list
+            a list of the possible color options (as integers)
+        """
         self.color = self.choose_color(color_options)
         self.game_board.set_color(self.color, self.filled)
         self.game_board.update_filled(self.filled)
         self.score = len(self.filled)
 
     def choose_color(self, color_options):
+        """
+        A function to choose the color based on the options that should be implemented in subclasses.
+        """
         raise NotImplementedError
 
 
 class HumanPlayer(Player):
+    """
+    A subclass of Player in which the user can play against the AI.
+    """
+
     def choose_color(self, color_options):
+        """
+        Chooses a color using valid user input.
+
+        Parameters
+        ----------
+        color_options : list
+            a list of the possible color options (as integers)
+
+        Returns
+        -------
+        int
+            the integer of the chosen color
+        """
         color_options_names = [(i, list(COLORS.keys())[i]) for i in color_options]
         print(f'Color options: {color_options_names}')
 
@@ -40,7 +86,24 @@ class HumanPlayer(Player):
 
 
 class AIPlayer(Player):
+    """
+    A subclass of Player in which the colors are chosen to maximize the score.
+    """
+
     def choose_color(self, color_options):
+        """
+        Chooses a color that will maximize the score using depth-first search.
+
+        Parameters
+        ----------
+        color_options : list
+            a list of the possible color options (as integers)
+
+        Returns
+        -------
+        int
+            the integer of the best color
+        """
         max_score = -1
         best_color = -1
 
@@ -61,5 +124,22 @@ class AIPlayer(Player):
 
 
 class RandomPlayer(Player):
+    """
+    A subclass of Player in which the colors are chosen randomly.
+    """
+
     def choose_color(self, color_options):
+        """
+        Chooses a color randomly.
+
+        Parameters
+        ----------
+        color_options : list
+            a list of the possible color options (as integers)
+
+        Returns
+        -------
+        int
+            the integer of the randomly chosen color
+        """
         return np.random.choice(color_options)

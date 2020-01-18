@@ -1,3 +1,7 @@
+"""
+Contains the FillerGame and FillerBoard classes.
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -14,6 +18,10 @@ COLORS = {'red': [255, 0, 0],  # red
 
 
 class FillerGame:
+    """
+    Implements the game-playing functions.
+    """
+
     def __init__(self, number_of_colors, height, width, automated):
         self.number_of_colors = number_of_colors
         self.number_of_cells = height * width
@@ -31,15 +39,36 @@ class FillerGame:
         self.player_2 = player.AIPlayer([player_2_starting_cell], self.game_board)
 
     def get_color_options(self):
+        """
+        Returns the possible color options that can be played.
+
+        Returns
+        -------
+        list
+            a list of the possible color options (as integers)
+        """
         mask = (self.color_options != self.player_1.color) & (self.color_options != self.player_2.color)
         return self.color_options[mask]
 
     def check_for_end_of_game(self):
+        """
+        Checks if the game is over.
+        The game is over if the players' scores are greater than the number of cells 
+        or if one of the players has a score greater than half the number of cells.
+
+        Returns
+        -------
+        bool
+            [description]
+        """
         return (self.player_1.score + self.player_2.score > self.number_of_cells) | \
             (self.player_1.score > self.number_of_cells / 2) | \
             (self.player_2.score > self.number_of_cells / 2)
 
     def play_single_turn(self):
+        """
+        Completes a single turn by showing the gameboard, playing each of the players' turns, and printing the result.
+        """
         self.game_board.graphical_output()
         self.player_1.play_turn(self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
@@ -49,6 +78,9 @@ class FillerGame:
         print()
 
     def play_game(self):
+        """
+        Completes the entire game by playing turns until the game is over and then prints the result.
+        """
         while not self.check_for_end_of_game():
             self.play_single_turn()
             if self.automated:
@@ -64,6 +96,10 @@ class FillerGame:
 
 
 class FillerBoard:
+    """
+    Implements the functions of the gameboard, which is implemented as a 2D numpy array.
+    """
+
     def __init__(self, number_of_colors, height, width):
         self.height = height
         self.width = width
@@ -76,10 +112,22 @@ class FillerBoard:
         self.board = np.random.randint(0, number_of_colors, (height, width))
 
     def text_output(self):
+        """
+        Outputs the gameboard as text.
+        """
         print(self.board)
         print()
 
     def graphical_output(self, block=False):
+        """
+        Outputs the gameboard in a MatPlotLib window that is updated everytime this function is called.
+        The 2D numpy array is converted to colors using the COLORS dictionary and then repeated to create an image.
+
+        Parameters
+        ----------
+        block : bool, optional
+            determines whether the MatPlotLib figure blocks code execution, by default False
+        """
         masks = [np.where(self.board == i, True, False) for i in range(self.number_of_colors)]
         output = np.zeros((self.height, self.width, 3), dtype=np.int)
         for mask, color in zip(masks, list(COLORS.values())[:self.number_of_colors]):
@@ -92,13 +140,44 @@ class FillerBoard:
         plt.show(block)
 
     def get_color(self, coord):
+        """
+        Gets the color at the specified coordinates on the gameboard.
+
+        Parameters
+        ----------
+        coord : tuple
+            the coordinates in (y, x) form
+
+        Returns
+        -------
+        int
+            the color at the specified coordinates (as an integer)
+        """
         return self.board[coord[0], coord[1]]
 
     def set_color(self, color, filled):
+        """
+        Sets the color at the specified cells on the gameboard.
+
+        Parameters
+        ----------
+        color : int
+            the color to set at the specified cells
+        filled : list
+            a list of cells that belong to the player
+        """
         for cell in filled:
             self.board[cell[0], cell[1]] = color
 
     def update_filled(self, filled):
+        """
+        Updates the list of cells that belong to the player.
+
+        Parameters
+        ----------
+        filled : list
+            a list of cells that belong to the player
+        """
         for cell in filled:
             coord_x = cell[1]
             coord_y = cell[0]

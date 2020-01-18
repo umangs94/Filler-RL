@@ -5,8 +5,6 @@ Contains the Player superclass and its subclasses.
 import copy
 import numpy as np
 
-from filler import COLORS
-
 
 class Player:
     """
@@ -71,6 +69,8 @@ class HumanPlayer(Player):
         int
             the integer of the chosen color
         """
+        from filler import COLORS
+
         color_options_names = [(i, list(COLORS.keys())[i]) for i in color_options]
         print(f'Color options: {color_options_names}')
 

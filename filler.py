@@ -34,17 +34,25 @@ class FillerGame:
         mask = (self.color_options != self.player_1.color) & (self.color_options != self.player_2.color)
         return self.color_options[mask]
 
-    def play(self):
-        while self.player_1.score + self.player_2.score < self.number_of_squares:
-            self.player_1.play_turn(self.get_color_options())
-            self.player_2.play_turn(self.get_color_options())
+    def check_for_end_of_game(self):
+        return (self.player_1.score + self.player_2.score < self.number_of_squares) | \
+            (self.player_1.score > self.number_of_squares / 2) | \
+            (self.player_2.score > self.number_of_squares / 2)
 
-            print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
-            print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
-            print()
+    def play_single_turn(self):
+        self.player_1.play_turn(self.get_color_options())
+        self.player_2.play_turn(self.get_color_options())
 
-            if self.automated:
-                self.game_board.graphical_output(block=True)
+        print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
+        print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
+        print()
+
+        if self.automated:
+            self.game_board.graphical_output(block=True)
+
+    def play_game(self):
+        while:
+            self.play_single_turn()
 
         if self.player_1.score > self.player_2.score:
             print("player 1 wins!" if AUTOMATED else "you win!")
@@ -128,4 +136,4 @@ class FillerBoard:
 if __name__ == "__main__":
     AUTOMATED = input('Enter "y" for AI vs. AI: ') == 'y'
     FILLER = FillerGame(number_of_colors=8, height=12, width=8, automated=AUTOMATED)
-    FILLER.play()
+    FILLER.play_game()

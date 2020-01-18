@@ -151,7 +151,7 @@ class FillerBoard:
 
         if display:
             plt.imshow(image)
-            plt.show(block)
+            plt.show(block=block)
 
         return image
 

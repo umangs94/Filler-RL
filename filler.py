@@ -16,7 +16,7 @@ COLORS = {'red': [255, 0, 0],  # red
 class FillerGame:
     def __init__(self, number_of_colors, height, width, automated):
         self.number_of_colors = number_of_colors
-        self.number_of_squares = height * width
+        self.number_of_cells = height * width
         self.color_options = np.arange(number_of_colors)
         self.game_board = FillerBoard(number_of_colors, height, width)
         self.automated = automated
@@ -35,9 +35,9 @@ class FillerGame:
         return self.color_options[mask]
 
     def check_for_end_of_game(self):
-        return (self.player_1.score + self.player_2.score > self.number_of_squares) | \
-            (self.player_1.score > self.number_of_squares / 2) | \
-            (self.player_2.score > self.number_of_squares / 2)
+        return (self.player_1.score + self.player_2.score > self.number_of_cells) | \
+            (self.player_1.score > self.number_of_cells / 2) | \
+            (self.player_2.score > self.number_of_cells / 2)
 
     def play_single_turn(self):
         self.game_board.graphical_output()

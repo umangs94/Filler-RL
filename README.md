@@ -9,7 +9,7 @@ The AI player does a depth-first search (DFS) to select the best action to take.
 
 Run `python filler.py` to play.
 
-Press `y` to watch as the AI player competes against another AI player. Press `q` in the MatPlotLib window to see the next turn.
+Press `y` to watch as the AI player competes against another AI player. Press `return` in the Terminal window to advance a turn.
 
 Press `return` or any other key to play manually against the AI player. The MatPlotLib window will show the current game state. Enter your color choice in the Terminal window.
 

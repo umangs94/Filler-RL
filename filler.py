@@ -62,8 +62,6 @@ class FillerGame:
             print("it was a tie!")
         self.game_board.graphical_output(block=True)
 
-        return len(np.unique(self.game_board.board)) == 2
-
 
 class FillerBoard:
     def __init__(self, number_of_colors, height, width):

@@ -51,7 +51,7 @@ class FillerGame:
             self.game_board.graphical_output(block=True)
 
     def play_game(self):
-        while:
+        while not self.check_for_end_of_game():
             self.play_single_turn()
 
         if self.player_1.score > self.player_2.score:

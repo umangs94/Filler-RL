@@ -118,7 +118,7 @@ class FillerBoard:
         print(self.board)
         print()
 
-    def graphical_output(self, block=False, save=False):
+    def graphical_output(self, block=False, save=False, display=True):
         """
         Outputs the gameboard in a MatPlotLib window that is updated everytime this function is called.
         The 2D numpy array is converted to colors using the COLORS dictionary and then repeated to create an image.
@@ -137,8 +137,9 @@ class FillerBoard:
         if save:
             plt.imsave('image.png', image)
 
-        plt.imshow(image)
-        plt.show(block)
+        if display:
+            plt.imshow(image)
+            plt.show(block)
 
     def get_color(self, coord):
         """

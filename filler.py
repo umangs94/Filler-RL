@@ -65,7 +65,7 @@ class FillerBoard:
 
         self.board = np.random.randint(0, number_of_colors, (height, width))
 
-    def output(self):
+    def text_output(self):
         print(self.board)
         print()
 

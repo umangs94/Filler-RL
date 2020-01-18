@@ -133,9 +133,3 @@ class FillerBoard:
                 cell_right_value = self.get_color(new_cell)
                 if cell_value == cell_right_value and new_cell not in filled:
                     filled.append(new_cell)
-
-
-if __name__ == "__main__":
-    AUTOMATED = input('Enter "y" for AI vs. AI: ') == 'y'
-    FILLER = FillerGame(number_of_colors=8, height=12, width=8, automated=AUTOMATED)
-    FILLER.play_game()

@@ -61,7 +61,7 @@ class FillerGame:
         bool
             [description]
         """
-        return (self.player_1.score + self.player_2.score > self.number_of_cells) | \
+        return (self.player_1.score + self.player_2.score >= self.number_of_cells) | \
             (self.player_1.score > self.number_of_cells / 2) | \
             (self.player_2.score > self.number_of_cells / 2)
 

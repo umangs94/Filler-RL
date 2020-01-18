@@ -14,7 +14,7 @@ COLORS = {'red': [255, 0, 0],  # red
 
 
 class FillerGame:
-    def __init__(self, number_of_colors, height, width, automated=True):
+    def __init__(self, number_of_colors, height, width, automated):
         self.number_of_colors = number_of_colors
         self.number_of_squares = height * width
         self.color_options = np.arange(number_of_colors)

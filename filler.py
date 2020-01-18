@@ -84,7 +84,7 @@ class FillerGame:
         while not self.check_for_end_of_game():
             self.play_single_turn()
             if self.automated:
-                input('Press any key to continue.')
+                input('Press any key to continue.\n')
 
         if self.player_1.score > self.player_2.score:
             print("player 1 wins!" if self.automated else "you win!")

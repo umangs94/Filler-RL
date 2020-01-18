@@ -72,7 +72,7 @@ class FillerGame:
         bool
             True if the game is over, False otherwise
         """
-        return ((self.player_1.score > self.number_of_cells / 2) or (self.player_2.score > self.number_of_cells / 2))
+        return (self.player_1.score > self.number_of_cells / 2) or (self.player_2.score > self.number_of_cells / 2)
 
     def play_single_turn(self):
         """

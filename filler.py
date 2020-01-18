@@ -40,15 +40,13 @@ class FillerGame:
             (self.player_2.score > self.number_of_squares / 2)
 
     def play_single_turn(self):
+        self.game_board.graphical_output(block=self.automated)
         self.player_1.play_turn(self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
 
         print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
         print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
         print()
-
-        if self.automated:
-            self.game_board.graphical_output(block=True)
 
     def play_game(self):
         while not self.check_for_end_of_game():
@@ -77,7 +75,7 @@ class FillerBoard:
         print(self.board)
         print()
 
-    def graphical_output(self, block=False):
+    def graphical_output(self, block=True):
         masks = [np.where(self.board == i, True, False) for i in range(self.number_of_colors)]
         output = np.zeros((self.height, self.width, 3), dtype=np.int)
         for mask, color in zip(masks, list(COLORS.values())[:self.number_of_colors]):

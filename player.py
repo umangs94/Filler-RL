@@ -27,7 +27,6 @@ class HumanPlayer(Player):
     def choose_color(self, color_options):
         color_options_names = [(i, list(COLORS.keys())[i]) for i in color_options]
         print(f'Color options: {color_options_names}')
-        self.game_board.graphical_output()
 
         while True:
             chosen_color = int(input('Choose a color by number: '))

@@ -40,7 +40,7 @@ class FillerGame:
             (self.player_2.score > self.number_of_squares / 2)
 
     def play_single_turn(self):
-        self.game_board.graphical_output(block=self.automated)
+        self.game_board.graphical_output()
         self.player_1.play_turn(self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
 
@@ -51,6 +51,8 @@ class FillerGame:
     def play_game(self):
         while not self.check_for_end_of_game():
             self.play_single_turn()
+            if self.automated:
+                input('Press any key to continue.')
 
         if self.player_1.score > self.player_2.score:
             print("player 1 wins!" if AUTOMATED else "you win!")
@@ -58,7 +60,7 @@ class FillerGame:
             print("player 2 wins!" if AUTOMATED else "you lose!")
         else:
             print("it was a tie!")
-        self.game_board.graphical_output()
+        self.game_board.graphical_output(block=True)
 
         return len(np.unique(self.game_board.board)) == 2
 
@@ -69,13 +71,17 @@ class FillerBoard:
         self.width = width
         self.number_of_colors = number_of_colors
 
+        plt.figure('Filler')
+        plt.ion()
+        plt.axis('off')
+
         self.board = np.random.randint(0, number_of_colors, (height, width))
 
     def text_output(self):
         print(self.board)
         print()
 
-    def graphical_output(self, block=True):
+    def graphical_output(self, block=False):
         masks = [np.where(self.board == i, True, False) for i in range(self.number_of_colors)]
         output = np.zeros((self.height, self.width, 3), dtype=np.int)
         for mask, color in zip(masks, list(COLORS.values())[:self.number_of_colors]):
@@ -84,10 +90,8 @@ class FillerBoard:
         output = np.repeat(np.repeat(output, 10, axis=0), 10, axis=1)
         plt.imsave('image.png', output)
 
-        plt.close('all')
         plt.imshow(output)
-        plt.axis('off')
-        plt.show(block=block)
+        plt.show(block)
 
     def get_color(self, coord):
         return self.board[coord[0], coord[1]]

@@ -68,14 +68,21 @@ class FillerGame:
     def play_single_turn(self):
         """
         Completes a single turn by showing the gameboard, playing each of the players' turns, and printing the result.
+
+        Returns
+        -------
+        np.ndarray
+            the image in numpy format with shape (height, width, 3)
         """
-        self.game_board.graphical_output()
+        image = self.game_board.graphical_output()
         self.player_1.play_turn(self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
 
         print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
         print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
         print()
+
+        return image
 
     def play_game(self):
         """
@@ -127,6 +134,11 @@ class FillerBoard:
         ----------
         block : bool, optional
             determines whether the MatPlotLib figure blocks code execution, by default False
+
+        Returns
+        -------
+        np.ndarray
+            the image in numpy format with shape (height, width, 3)
         """
         masks = [np.where(self.board == i, True, False) for i in range(self.number_of_colors)]
         output = np.zeros((self.height, self.width, 3), dtype=np.int)
@@ -140,6 +152,8 @@ class FillerBoard:
         if display:
             plt.imshow(image)
             plt.show(block)
+
+        return image
 
     def get_color(self, coord):
         """

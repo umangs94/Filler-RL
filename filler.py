@@ -1,6 +1,16 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 import player
+
+COLORS = {'red': [255, 0, 0],  # red
+          'orange': [255, 128, 0],  # orange
+          'yellow': [255, 255, 0],  # yellow
+          'green': [0, 255, 0],  # green
+          'blue': [0, 0, 255],  # blue
+          'purple': [127, 0, 255],  # purple
+          'pink': [255, 0, 255],  # pink
+          'grey': [128, 128, 128]}  # grey
 
 
 class FillerGame:
@@ -9,10 +19,10 @@ class FillerGame:
         self.number_of_squares = height * width
         self.color_options = np.arange(number_of_colors)
         self.game_board = FillerBoard(number_of_colors, height, width)
-        self.game_board.output()
+        self.automated = automated
 
         player_1_starting_cell = (height - 1, 0)
-        if automated:
+        if self.automated:
             self.player_1 = player.AIPlayer([player_1_starting_cell], self.game_board)
         else:
             self.player_1 = player.HumanPlayer([player_1_starting_cell], self.game_board)
@@ -31,7 +41,10 @@ class FillerGame:
 
             print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
             print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
-            self.game_board.output()
+            print()
+
+            if self.automated:
+                self.game_board.graphical_output(block=True)
 
         if self.player_1.score > self.player_2.score:
             print("player 1 wins")
@@ -39,6 +52,7 @@ class FillerGame:
             print("player 2 wins")
         else:
             print('tie')
+        self.game_board.graphical_output()
 
         return len(np.unique(self.game_board.board)) == 2
 
@@ -47,12 +61,26 @@ class FillerBoard:
     def __init__(self, number_of_colors, height, width):
         self.height = height
         self.width = width
+        self.number_of_colors = number_of_colors
 
         self.board = np.random.randint(0, number_of_colors, (height, width))
 
     def output(self):
         print(self.board)
         print()
+
+    def graphical_output(self, block=False):
+        masks = [np.where(self.board == i, True, False) for i in range(self.number_of_colors)]
+        output = np.zeros((self.height, self.width, 3), dtype=np.int)
+        for mask, color in zip(masks, list(COLORS.values())[:self.number_of_colors]):
+            output[mask] = color
+
+        output = np.repeat(np.repeat(output, 10, axis=0), 10, axis=1)
+        plt.imsave('image.png', output)
+
+        plt.close('all')
+        plt.imshow(output)
+        plt.show(block=block)
 
     def get_color(self, coord):
         return self.board[coord[0], coord[1]]

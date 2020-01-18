@@ -1,6 +1,8 @@
 import copy
 import numpy as np
 
+from filler import COLORS
+
 
 class Player:
     def __init__(self, filled, game_board):
@@ -23,9 +25,12 @@ class Player:
 
 class HumanPlayer(Player):
     def choose_color(self, color_options):
-        print(f'Color option: {color_options}')
+        color_options_names = [(i, list(COLORS.keys())[i]) for i in color_options]
+        print(f'Color options: {color_options_names}')
+        self.game_board.graphical_output()
+
         while True:
-            chosen_color = int(input('Choose a color: '))
+            chosen_color = int(input('Choose a color by number: '))
             if chosen_color in color_options:
                 return chosen_color
             else:

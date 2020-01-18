@@ -47,11 +47,11 @@ class FillerGame:
                 self.game_board.graphical_output(block=True)
 
         if self.player_1.score > self.player_2.score:
-            print("player 1 wins")
+            print("player 1 wins!" if AUTOMATED else "you win!")
         elif self.player_2.score > self.player_1.score:
-            print("player 2 wins")
+            print("player 2 wins!" if AUTOMATED else "you lose!")
         else:
-            print('tie')
+            print("it was a tie!")
         self.game_board.graphical_output()
 
         return len(np.unique(self.game_board.board)) == 2

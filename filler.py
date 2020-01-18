@@ -80,6 +80,7 @@ class FillerBoard:
 
         plt.close('all')
         plt.imshow(output)
+        plt.axis('off')
         plt.show(block=block)
 
     def get_color(self, coord):

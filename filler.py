@@ -55,9 +55,9 @@ class FillerGame:
                 input('Press any key to continue.')
 
         if self.player_1.score > self.player_2.score:
-            print("player 1 wins!" if AUTOMATED else "you win!")
+            print("player 1 wins!" if self.automated else "you win!")
         elif self.player_2.score > self.player_1.score:
-            print("player 2 wins!" if AUTOMATED else "you lose!")
+            print("player 2 wins!" if self.automated else "you lose!")
         else:
             print("it was a tie!")
         self.game_board.graphical_output(block=True)

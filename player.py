@@ -29,11 +29,14 @@ class HumanPlayer(Player):
         print(f'Color options: {color_options_names}')
 
         while True:
-            chosen_color = int(input('Choose a color by number: '))
-            if chosen_color in color_options:
+            try:
+                chosen_color = int(input('Choose a color by number: '))
+                if chosen_color not in color_options:
+                    raise ValueError
+
                 return chosen_color
-            else:
-                print('Invalid input.')
+            except ValueError:
+                print('Invalid input.\n')
 
 
 class AIPlayer(Player):

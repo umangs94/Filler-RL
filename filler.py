@@ -22,16 +22,19 @@ class FillerGame:
     Implements the game-playing functions.
     """
 
-    def __init__(self, number_of_colors, height, width, automated):
+    def __init__(self, number_of_colors, height, width, automated=False, r_l=False):
         self.number_of_colors = number_of_colors
         self.number_of_cells = height * width
         self.color_options = np.arange(number_of_colors)
         self.game_board = FillerBoard(number_of_colors, height, width)
         self.automated = automated
+        self.r_l = r_l
 
         player_1_starting_cell = (height - 1, 0)
         if self.automated:
             self.player_1 = player.AIPlayer([player_1_starting_cell], self.game_board)
+        elif self.r_l:
+            self.player_1 = player.RLPlayer([player_1_starting_cell], self.game_board)
         else:
             self.player_1 = player.HumanPlayer([player_1_starting_cell], self.game_board)
 
@@ -74,24 +77,26 @@ class FillerGame:
         """
         return (self.player_1.score > self.number_of_cells / 2) or (self.player_2.score > self.number_of_cells / 2)
 
-    def play_single_turn(self):
+    def play_single_turn(self, action=None):
         """
         Completes a single turn by showing the gameboard, playing each of the players' turns, and printing the result.
+        The former and latter are only done if self.r_l is False.
 
-        Returns
-        -------
-        np.ndarray
-            the image in numpy format with shape (height, width, 3)
+        Parameters
+        ----------
+        action : int, optional
+            the color to play, when doing RL
         """
-        image = self.game_board.graphical_output()
-        self.player_1.play_turn(self.get_color_options())
+        if not self.r_l:
+            self.game_board.graphical_output()
+
+        self.player_1.play_turn([action] if action else self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
 
-        print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
-        print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
-        print()
-
-        return image
+        if not self.r_l:
+            print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
+            print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
+            print()
 
     def play_game(self, early_finish=False):
         """

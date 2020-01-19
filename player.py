@@ -143,3 +143,25 @@ class RandomPlayer(Player):
             the integer of the randomly chosen color
         """
         return np.random.choice(color_options)
+
+
+class RLPlayer(Player):
+    """
+    A subclass of Player in which the color is pre-selected by an RL agent.
+    """
+
+    def choose_color(self, color_options):
+        """
+        Chooses the pre-selected color.
+
+        Parameters
+        ----------
+        color_options : list
+            a list containing the pre-selected color
+
+        Returns
+        -------
+        int
+            the integer of the pre-selected color
+        """
+        return color_options[0]

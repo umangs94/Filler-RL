@@ -85,7 +85,7 @@ class FillerGame:
         Parameters
         ----------
         action : int, optional
-            the color to play, when doing RL
+            the integer for the color to play, when doing RL
         """
         if not self.r_l:
             self.game_board.graphical_output()

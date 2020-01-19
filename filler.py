@@ -73,7 +73,6 @@ class FillerGame:
     """
 
     def __init__(self, number_of_colors, height, width, automated=False, r_l=False):
-        self.number_of_colors = number_of_colors
         self.number_of_cells = height * width
         self.color_options = np.arange(number_of_colors)
         self.game_board = FillerBoard(number_of_colors, height, width)

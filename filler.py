@@ -17,6 +17,56 @@ COLORS = {'red': [255, 0, 0],  # red
           'grey': [128, 128, 128]}  # grey
 
 
+class FillerEnv:
+    """
+    Implements the RL environment for the Filler game.
+    """
+
+    def __init__(self):
+        self.game = None
+
+    def reset(self):
+        """
+        Resets the enviroment.
+
+        Returns
+        -------
+        np.ndarray
+            the gameboard in numpy format with shape (height, width)
+        """
+        self.game = FillerGame(number_of_colors=8, height=12, width=8, r_l=True)
+        return self.game.game_board.board.flatten()
+
+    def step(self, action):
+        """
+        Performs the specified action in the environment and returns the observation, \
+            reward, and if the game is over.
+
+        Parameters
+        ----------
+        action : int
+            the integer for the color to play
+
+        Returns
+        -------
+        np.ndarray, int, bool
+            the gameboard in numpy format with shape (height, width), reward, \
+                and if the game is over
+        """
+        self.game.play_single_turn(action)
+        next_obs = self.game.game_board.board
+        reward = self.game.player_1.score - self.game.player_2.score
+        done = self.game.check_for_end_of_game()
+
+        if done:
+            if self.game.player_1.score > self.game.player_2.score:
+                reward += 50
+            elif self.game.player_2.score > self.game.player_1.score:
+                reward -= 50
+
+        return next_obs, reward, done
+
+
 class FillerGame:
     """
     Implements the game-playing functions.

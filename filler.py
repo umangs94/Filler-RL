@@ -63,7 +63,7 @@ class FillerEnv:
         self.game.play_single_turn(action)
         next_obs = self.game.game_board.get_board()
         reward = self.game.player_1.score - self.game.player_2.score
-        done = self.game.check_for_end_of_game() or self.game.check_for_early_finish()
+        done = self.game.check_for_end_of_game()
 
         if done:
             if self.game.player_1.score > self.game.player_2.score:

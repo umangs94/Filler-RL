@@ -35,7 +35,7 @@ class FillerEnv:
             the gameboard in numpy format with shape (height, width)
         """
         self.game = FillerGame(number_of_colors=8, height=12, width=8, r_l=True)
-        return self.game.game_board.board.flatten()
+        return self.game.game_board.get_board()
 
     def step(self, action):
         """
@@ -54,7 +54,7 @@ class FillerEnv:
                 and if the game is over
         """
         self.game.play_single_turn(action)
-        next_obs = self.game.game_board.board
+        next_obs = self.game.game_board.get_board()
         reward = self.game.player_1.score - self.game.player_2.score
         done = self.game.check_for_end_of_game()
 
@@ -294,3 +294,14 @@ class FillerBoard:
                 cell_right_value = self.get_color(new_cell)
                 if cell_value == cell_right_value and new_cell not in filled:
                     filled.append(new_cell)
+
+    def get_board(self):
+        """
+        Flattens the gameboard and returns it as a 1D array.
+
+        Returns
+        -------
+        np.ndarray
+            a flat 1D representation of the gameboard
+        """
+        return self.board.reshape(-1, self.height * self.width)

@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from filler import FillerEnv
 
-GAMMA = 0.99
+GAMMA = 0.8
 
 
 class PolicyGradient:

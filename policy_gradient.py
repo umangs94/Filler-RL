@@ -82,3 +82,5 @@ class PolicyGradient:
 if __name__ == "__main__":
     P_G = PolicyGradient(n_episodes=10000, update_after_episodes=100)
     P_G.train()
+    P_G.model.save('model.h5')
+    print('Model saved')

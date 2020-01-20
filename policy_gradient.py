@@ -3,12 +3,11 @@ import tensorflow as tf
 
 from filler import FillerEnv
 
-GAMMA = 0.8
-
 
 class PolicyGradient:
-    def __init__(self, n_episodes, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
+    def __init__(self, n_episodes, gamma=0.9, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
         self.n_episodes = n_episodes
+        self.gamma = gamma
         self.update_after_episodes = update_after_episodes
         self.images_after_episodes = images_after_episodes
 
@@ -50,7 +49,7 @@ class PolicyGradient:
         return action, tape.gradient(loss, self.model.trainable_variables)
 
     def discount_rewards(self, rewards):
-        return [r * GAMMA**i for i, r in enumerate(rewards)]
+        return [sum([r * self.gamma ** j for j, r in enumerate(rewards[i:])]) for i in range(len(rewards))]
 
     def train(self):
         rewards = []
@@ -72,8 +71,9 @@ class PolicyGradient:
 
             rewards.append(sum(e_rewards))
             discounted_rewards = self.discount_rewards(e_rewards)
+            rewards_baseline = np.mean(discounted_rewards)
 
-            for grads, reward in zip(e_grads, discounted_rewards):
+            for grads, reward in zip(e_grads, discounted_rewards - rewards_baseline):
                 for i, grad in enumerate(grads):
                     self.grad_buffer[i] += grad * reward
 

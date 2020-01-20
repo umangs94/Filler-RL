@@ -7,9 +7,10 @@ GAMMA = 0.99
 
 
 class PolicyGradient:
-    def __init__(self, n_episodes, update_after_episodes=10, learning_rate=0.01):
+    def __init__(self, n_episodes, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
         self.n_episodes = n_episodes
         self.update_after_episodes = update_after_episodes
+        self.images_after_episodes = images_after_episodes
 
         self.env = FillerEnv()
 
@@ -54,7 +55,11 @@ class PolicyGradient:
     def train(self):
         rewards = []
         for e_n in range(self.n_episodes):
-            obs = self.env.reset(save_images_suffix=e_n+1 if not e_n % self.update_after_episodes else False)
+            save_images_suffix = e_n+1 if not e_n % self.images_after_episodes else False
+            if save_images_suffix:
+                self.model.save('model.h5')
+
+            obs = self.env.reset(save_images_suffix=save_images_suffix)
             e_grads = []
             e_rewards = []
 
@@ -80,7 +85,7 @@ class PolicyGradient:
 
 
 if __name__ == "__main__":
-    P_G = PolicyGradient(n_episodes=10000, update_after_episodes=100)
+    P_G = PolicyGradient(n_episodes=1000000, update_after_episodes=100, images_after_episodes=10000)
     P_G.train()
     P_G.model.save('model.h5')
     print('Model saved')

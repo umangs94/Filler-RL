@@ -156,6 +156,7 @@ class FillerGame:
         early_finish : bool, optional
             determines whether the game can be finished early, by default False
         """
+        early_finish = self.r_l
         while not (self.check_for_end_of_game() or (early_finish and self.check_for_early_finish())):
             self.play_single_turn()
             if self.automated:

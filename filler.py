@@ -25,16 +25,23 @@ class FillerEnv:
     def __init__(self):
         self.game = None
 
-    def reset(self):
+    def reset(self, save_images_suffix=False):
         """
         Resets the enviroment.
+
+        Parameters
+        ----------
+        save_images_suffix : bool
+            the integer for the color to play
+        image_suffix : str, optional
+            filename suffix for the image (which is saved if not False), by default False
 
         Returns
         -------
         np.ndarray
             the gameboard in numpy format with shape (height, width)
         """
-        self.game = FillerGame(number_of_colors=8, height=12, width=8, r_l=True)
+        self.game = FillerGame(number_of_colors=8, height=12, width=8, r_l=True, save_images_suffix=save_images_suffix)
         return self.game.game_board.get_board()
 
     def step(self, action):
@@ -72,12 +79,15 @@ class FillerGame:
     Implements the game-playing functions.
     """
 
-    def __init__(self, number_of_colors, height, width, automated=False, r_l=False):
+    def __init__(self, number_of_colors, height, width, automated=False, r_l=False, save_images_suffix=False):
         self.number_of_cells = height * width
         self.color_options = np.arange(number_of_colors)
         self.game_board = FillerBoard(number_of_colors, height, width)
         self.automated = automated
         self.r_l = r_l
+        self.save_images_suffix = save_images_suffix
+
+        self.turn_count = 0
 
         player_1_starting_cell = (height - 1, 0)
         if self.automated:
@@ -136,6 +146,10 @@ class FillerGame:
         action : int, optional
             the integer for the color to play, when doing RL
         """
+        self.turn_count += 1
+        if self.save_images_suffix:
+            self.game_board.graphical_output(save=True, display=False,
+                                             image_suffix=f'{self.save_images_suffix}_{self.turn_count}')
         if not self.r_l:
             self.game_board.graphical_output()
 

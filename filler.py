@@ -67,9 +67,13 @@ class FillerEnv:
 
         if done:
             if self.game.player_1.score > self.game.player_2.score:
-                reward += 50
+                reward += 500
             elif self.game.player_2.score > self.game.player_1.score:
-                reward -= 50
+                reward -= 500
+
+            if self.game.save_images_suffix:
+                image_suffix = f'{self.game.save_images_suffix}_{self.game.turn_count+1}'
+                self.game.game_board.graphical_output(save=True, display=False, image_suffix=image_suffix)
 
         return next_obs, reward, done
 

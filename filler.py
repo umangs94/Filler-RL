@@ -194,7 +194,7 @@ class FillerBoard:
         print(self.board)
         print()
 
-    def graphical_output(self, block=False, save=False, display=True):
+    def graphical_output(self, block=False, save=False, display=True, folder_name='output', image_suffix=None):
         """
         Outputs the gameboard in a MatPlotLib window that is updated everytime this function is called.
         The 2D numpy array is converted to colors using the COLORS dictionary and then repeated to create an image.
@@ -203,6 +203,14 @@ class FillerBoard:
         ----------
         block : bool, optional
             determines whether the MatPlotLib figure blocks code execution, by default False
+        save : bool, optional
+            determines whether the MatPlotLib figure is saved, by default False
+        display : bool, optional
+            determines whether the MatPlotLib figure is displayed, by default True
+        folder_name : str, optional
+            the name of the folder where the image is saved, by default 'output'
+        image_suffix : str, optional
+            filename suffix for the image, by default None
 
         Returns
         -------
@@ -214,9 +222,9 @@ class FillerBoard:
         for mask, color in zip(masks, list(COLORS.values())[:self.number_of_colors]):
             output[mask] = color
 
-        image = np.repeat(np.repeat(output, 10, axis=0), 10, axis=1)
+        image = np.repeat(np.repeat(output, 10, axis=0), 10, axis=1)/255.0
         if save:
-            plt.imsave('image.png', image)
+            plt.imsave(f'{folder_name}/image{image_suffix}.png', image)
 
         if display:
             plt.imshow(image)

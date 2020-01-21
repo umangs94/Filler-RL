@@ -64,7 +64,7 @@ class FillerEnv:
             the gameboard in numpy format with shape (height, width), reward, \
                 and if the game is over
         """
-        self.game.play_single_turn(action)
+        self.game.play_single_turn([action])
         next_obs = self.game.game_board.get_board()
         diff = self.game.player_1.score - self.game.player_2.score
         reward = np.sign(diff) * diff ** 2 - self.game.turn_count ** 2
@@ -162,7 +162,7 @@ class FillerGame:
         if not (self.r_l or self.automated):
             self.game_board.graphical_output()
 
-        self.player_1.play_turn([action] if action else self.get_color_options())
+        self.player_1.play_turn(action if action else self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
 
         if self.automated:

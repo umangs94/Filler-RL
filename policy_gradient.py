@@ -38,12 +38,11 @@ class PolicyGradient:
     def get_action_and_grads(self, obs):
         with tf.GradientTape() as tape:
             logits = self.model(obs)
-            action_dist = logits.numpy()
-            action = np.random.choice(self.env.game.all_colors, p=action_dist[0])
-
             color_options = self.env.game.get_color_options()
-            if action not in color_options:
-                action = np.random.choice(color_options)
+
+            action_dist = [logits.numpy()[0, c] for c in color_options]
+            action = np.random.choice(color_options, p=action_dist/sum(action_dist))
+
             loss = self.loss_fn([action], logits)
 
         return action, tape.gradient(loss, self.model.trainable_variables)

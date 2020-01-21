@@ -2,7 +2,6 @@
 Contains the Player superclass and its subclasses.
 """
 
-import copy
 import numpy as np
 
 
@@ -104,23 +103,10 @@ class AIPlayer(Player):
         int
             the integer of the best color
         """
-        max_score = -1
-        best_color = -1
-
         np.random.shuffle(color_options)
-        for color in color_options:
-            simulated_game_board = copy.copy(self.game_board)
-            simulated_filled = self.filled.copy()
+        counts = [self.game_board.get_color_count(color, self.filled.copy()) for color in color_options]
 
-            simulated_game_board.set_color(color, simulated_filled)
-            simulated_game_board.update_filled(simulated_filled)
-            simulated_score = len(simulated_filled)
-
-            if simulated_score > max_score:
-                max_score = simulated_score
-                best_color = color
-
-        return best_color
+        return color_options[np.argmax(counts)]
 
 
 class RandomPlayer(Player):

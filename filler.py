@@ -324,6 +324,61 @@ class FillerBoard:
                 if cell_value == cell_right_value and new_cell not in filled:
                     filled.append(new_cell)
 
+    def get_color_count(self, color, filled):
+        """
+        Counts the number of adjacent cells of the specified color.
+
+        Parameters
+        ----------
+        color : int
+            the color to count in the adjacent cells
+        filled : list
+            a list of cells that belong to the player
+
+        Returns
+        -------
+        int
+            the number of the adjacent cells with the specified color
+        """
+        count = 0
+        for cell in filled:
+            coord_x = cell[1]
+            coord_y = cell[0]
+
+            # up
+            if coord_y - 1 >= 0:
+                new_cell = (coord_y-1, coord_x)
+                cell_up_color = self.get_color(new_cell)
+                if cell_up_color == color and new_cell not in filled:
+                    count += 1
+                    filled.append(new_cell)
+
+            # down
+            if coord_y + 1 < self.height:
+                new_cell = (coord_y+1, coord_x)
+                cell_down_color = self.get_color(new_cell)
+                if cell_down_color == color and new_cell not in filled:
+                    count += 1
+                    filled.append(new_cell)
+
+            # left
+            if coord_x - 1 >= 0:
+                new_cell = (coord_y, coord_x-1)
+                cell_left_color = self.get_color(new_cell)
+                if cell_left_color == color and new_cell not in filled:
+                    count += 1
+                    filled.append(new_cell)
+
+            # right
+            if coord_x + 1 < self.width:
+                new_cell = (coord_y, coord_x+1)
+                cell_right_color = self.get_color(new_cell)
+                if cell_right_color == color and new_cell not in filled:
+                    count += 1
+                    filled.append(new_cell)
+
+        return count
+
     def get_board(self):
         """
         Flattens the gameboard and returns it as a 1D array.

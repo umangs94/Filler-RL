@@ -5,7 +5,7 @@ from filler import FillerEnv
 
 
 class PolicyGradient:
-    def __init__(self, n_episodes, gamma=0.9, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
+    def __init__(self, n_episodes, continue_training=False, gamma=0.9, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
         self.n_episodes = n_episodes
         self.gamma = gamma
         self.update_after_episodes = update_after_episodes
@@ -13,7 +13,7 @@ class PolicyGradient:
 
         self.env = FillerEnv(number_of_colors=8, height=12, width=8)
 
-        self.model = self.create_model()
+        self.model = self.create_model() if not continue_training else tf.keras.models.load_model('model.h5')
         self.optimizer = tf.optimizers.Adam(learning_rate=learning_rate)
         self.loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
@@ -56,10 +56,10 @@ class PolicyGradient:
     def discount_rewards(self, rewards):
         return [sum([r * self.gamma ** j for j, r in enumerate(rewards[i:])]) for i in range(len(rewards))]
 
-    def train(self):
+    def train(self, continue_training=0):
         rewards = []
         losses = []
-        for e_n in range(self.n_episodes):
+        for e_n in range(continue_training, self.n_episodes):
             save_images_suffix = e_n+1 if not e_n % self.images_after_episodes else False
             if save_images_suffix:
                 self.model.save('model.h5')

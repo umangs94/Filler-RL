@@ -38,18 +38,12 @@ class PolicyGradient:
     def get_action_and_grads(self, obs):
         with tf.GradientTape() as tape:
             logits = self.model(obs)
+
             color_options = self.env.game.get_color_options()
-
             action_dist = [[logits.numpy()[0, c] for c in color_options]]
+            action = color_options[tf.random.categorical(action_dist, num_samples=1).numpy()[0][0]]
 
-            try:
-                action = color_options[tf.random.categorical(action_dist, num_samples=1).numpy()[0][0]]
-            except ValueError:
-                action = np.random.choice(color_options)
-                print(action_dist)
-                print(color_options)
-
-            loss = self.loss_fn([action], logits)
+            loss = -tf.gather(tf.squeeze(tf.nn.log_softmax(logits)), action)
 
         return action, loss, tape.gradient(loss, self.model.trainable_variables)
 

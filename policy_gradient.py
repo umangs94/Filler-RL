@@ -41,7 +41,12 @@ class PolicyGradient:
             color_options = self.env.game.get_color_options()
 
             action_dist = [logits.numpy()[0, c] for c in color_options]
-            action = np.random.choice(color_options, p=action_dist/sum(action_dist))
+            try:
+                action = np.random.choice(color_options, p=action_dist/sum(action_dist))
+            except ValueError:
+                action = np.random.choice(color_options)
+                print(action_dist)
+                print(color_options)
 
             loss = self.loss_fn([action], logits)
 

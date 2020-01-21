@@ -85,7 +85,7 @@ class FillerGame:
 
     def __init__(self, number_of_colors, height, width, automated=False, r_l=False, save_images_suffix=False):
         self.number_of_cells = height * width
-        self.color_options = np.arange(number_of_colors)
+        self.all_colors = np.arange(number_of_colors)
         self.game_board = FillerBoard(number_of_colors, height, width, figure=not r_l)
         self.automated = automated
         self.r_l = r_l
@@ -113,8 +113,8 @@ class FillerGame:
         list
             a list of the possible color options (as integers)
         """
-        mask = (self.color_options != self.player_1.color) & (self.color_options != self.player_2.color)
-        return self.color_options[mask]
+        mask = (self.all_colors != self.player_1.color) & (self.all_colors != self.player_2.color)
+        return self.all_colors[mask]
 
     def check_for_end_of_game(self):
         """

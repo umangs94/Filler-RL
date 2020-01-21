@@ -39,7 +39,7 @@ class PolicyGradient:
         with tf.GradientTape() as tape:
             logits = self.model(obs)
             action_dist = logits.numpy()
-            action = np.random.choice(self.env.game.color_options, p=action_dist[0])
+            action = np.random.choice(self.env.game.all_colors, p=action_dist[0])
 
             color_options = self.env.game.get_color_options()
             if action not in color_options:
@@ -85,7 +85,7 @@ class PolicyGradient:
 
 
 if __name__ == "__main__":
-    P_G = PolicyGradient(n_episodes=1000000, update_after_episodes=100, images_after_episodes=10000)
+    P_G = PolicyGradient(n_episodes=1000, update_after_episodes=100, images_after_episodes=10000)
     P_G.train()
     P_G.model.save('model.h5')
     print('Model saved')

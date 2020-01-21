@@ -86,7 +86,7 @@ class FillerGame:
     def __init__(self, number_of_colors, height, width, automated=False, r_l=False, save_images_suffix=False):
         self.number_of_cells = height * width
         self.color_options = np.arange(number_of_colors)
-        self.game_board = FillerBoard(number_of_colors, height, width)
+        self.game_board = FillerBoard(number_of_colors, height, width, figure=not r_l)
         self.automated = automated
         self.r_l = r_l
         self.save_images_suffix = save_images_suffix
@@ -196,14 +196,15 @@ class FillerBoard:
     Implements the functions of the gameboard, which is implemented as a 2D numpy array.
     """
 
-    def __init__(self, number_of_colors, height, width):
+    def __init__(self, number_of_colors, height, width, figure=True):
         self.height = height
         self.width = width
         self.number_of_colors = number_of_colors
 
-        plt.figure('Filler')
-        plt.ion()
-        plt.axis('off')
+        if figure:
+            plt.figure('Filler')
+            plt.ion()
+            plt.axis('off')
 
         self.board = np.random.randint(0, number_of_colors, (height, width))
 

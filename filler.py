@@ -66,7 +66,8 @@ class FillerEnv:
         """
         self.game.play_single_turn(action)
         next_obs = self.game.game_board.get_board()
-        reward = self.game.player_1.score - self.game.player_2.score - self.game.turn_count
+        diff = self.game.player_1.score - self.game.player_2.score
+        reward = np.sign(diff) * diff ** 2 - self.game.turn_count ** 2
         done = self.game.check_for_end_of_game() or self.game.turn_count > 50
 
         if done:

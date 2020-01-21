@@ -82,6 +82,7 @@ class PolicyGradient:
                     self.grad_buffer[i] += grad * reward
 
             if not e_n % self.update_after_episodes:
+                self.grad_buffer = np.divide(self.grad_buffer, self.update_after_episodes)
                 self.optimizer.apply_gradients(zip(self.grad_buffer, self.model.trainable_variables))
                 self.reset_grad_buffer()
 

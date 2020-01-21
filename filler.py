@@ -154,11 +154,14 @@ class FillerGame:
         if self.save_images_suffix:
             self.game_board.graphical_output(save=True, display=False,
                                              image_suffix=f'{self.save_images_suffix}_{self.turn_count}')
-        if not self.r_l:
+        if not (self.r_l or self.automated):
             self.game_board.graphical_output()
 
         self.player_1.play_turn([action] if action else self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
+
+        if self.automated:
+            self.game_board.graphical_output(save=True, image_suffix=self.turn_count)
 
         if not self.r_l:
             print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")

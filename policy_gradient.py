@@ -50,13 +50,14 @@ class PolicyGradient:
 
             loss = self.loss_fn([action], logits)
 
-        return action, tape.gradient(loss, self.model.trainable_variables)
+        return action, loss, tape.gradient(loss, self.model.trainable_variables)
 
     def discount_rewards(self, rewards):
         return [sum([r * self.gamma ** j for j, r in enumerate(rewards[i:])]) for i in range(len(rewards))]
 
     def train(self):
         rewards = []
+        losses = []
         for e_n in range(self.n_episodes):
             save_images_suffix = e_n+1 if not e_n % self.images_after_episodes else False
             if save_images_suffix:
@@ -65,15 +66,19 @@ class PolicyGradient:
             obs = self.env.reset(save_images_suffix=save_images_suffix)
             e_grads = []
             e_rewards = []
+            e_losses = []
 
             done = False
             while not done:
-                action, grads = self.get_action_and_grads(obs)
+                action, loss, grads = self.get_action_and_grads(obs)
                 obs, reward, done = self.env.step(action)
+
                 e_grads.append(grads)
                 e_rewards.append(reward)
+                e_losses.append(loss)
 
             rewards.append(sum(e_rewards))
+            losses.append(np.mean(e_losses))
             discounted_rewards = self.discount_rewards(e_rewards)
             rewards_baseline = np.mean(discounted_rewards)
 
@@ -86,7 +91,8 @@ class PolicyGradient:
                 self.optimizer.apply_gradients(zip(self.grad_buffer, self.model.trainable_variables))
                 self.reset_grad_buffer()
 
-                print(f'Episode {e_n}\tAverage Reward: {np.mean(rewards[-self.update_after_episodes:])}')
+                print(f'Episode {e_n}\tAverage Reward: {np.mean(rewards[-self.update_after_episodes:])}\t' +
+                      f'Average Loss: {np.mean(losses[-self.update_after_episodes:])}')
 
 
 if __name__ == "__main__":

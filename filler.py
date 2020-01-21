@@ -22,8 +22,11 @@ class FillerEnv:
     Implements the RL environment for the Filler game.
     """
 
-    def __init__(self):
+    def __init__(self, number_of_colors, height, width):
         self.game = None
+        self.number_of_colors = number_of_colors
+        self.height = height
+        self.width = width
 
     def reset(self, save_images_suffix=False):
         """
@@ -41,7 +44,8 @@ class FillerEnv:
         np.ndarray
             the gameboard in numpy format with shape (height, width)
         """
-        self.game = FillerGame(number_of_colors=8, height=12, width=8, r_l=True, save_images_suffix=save_images_suffix)
+        self.game = FillerGame(number_of_colors=self.number_of_colors, height=self.height,
+                               width=self.width, r_l=True, save_images_suffix=save_images_suffix)
         return self.game.game_board.get_board()
 
     def step(self, action):

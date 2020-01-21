@@ -11,7 +11,7 @@ class PolicyGradient:
         self.update_after_episodes = update_after_episodes
         self.images_after_episodes = images_after_episodes
 
-        self.env = FillerEnv()
+        self.env = FillerEnv(number_of_colors=8, height=12, width=8)
 
         self.model = self.create_model()
         self.optimizer = tf.optimizers.Adam(learning_rate=learning_rate)
@@ -22,8 +22,8 @@ class PolicyGradient:
 
     def create_model(self):
         model = tf.keras.models.Sequential([
-            tf.keras.layers.Dense(32, input_shape=(self.env.game.number_of_cells,), activation='relu'),
-            tf.keras.layers.Dense(self.env.game.game_board.number_of_colors, activation='softmax'),
+            tf.keras.layers.Dense(32, input_shape=(self.env.height * self.env.width,), activation='relu'),
+            tf.keras.layers.Dense(self.env.number_of_colors, activation='softmax'),
         ])
 
         model.build()

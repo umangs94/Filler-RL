@@ -22,8 +22,8 @@ class PolicyGradient:
 
     def create_model(self):
         model = tf.keras.models.Sequential([
-            tf.keras.layers.Dense(32, input_shape=(8*12,)),
-            tf.keras.layers.Dense(8, activation='softmax'),
+            tf.keras.layers.Dense(32, input_shape=(self.env.game.number_of_cells,)),
+            tf.keras.layers.Dense(self.env.game.game_board.number_of_colors, activation='softmax'),
         ])
 
         model.build()

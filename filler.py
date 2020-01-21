@@ -7,14 +7,14 @@ import matplotlib.pyplot as plt
 
 import player
 
-COLORS = {'red': [255, 0, 0],  # red
-          'orange': [255, 128, 0],  # orange
-          'yellow': [255, 255, 0],  # yellow
-          'green': [0, 255, 0],  # green
-          'blue': [0, 0, 255],  # blue
-          'purple': [127, 0, 255],  # purple
-          'pink': [255, 0, 255],  # pink
-          'grey': [128, 128, 128]}  # grey
+COLORS = {'red': [255, 0, 0],  # 0
+          'orange': [255, 128, 0],  # 1
+          'yellow': [255, 255, 0],  # 2
+          'green': [0, 255, 0],  # 3
+          'blue': [0, 0, 255],  # 4
+          'purple': [127, 0, 255],  # 5
+          'pink': [255, 0, 255],  # 6
+          'grey': [128, 128, 128]}  # 7
 
 
 class FillerEnv:

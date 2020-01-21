@@ -23,7 +23,7 @@ class PolicyGradient:
     def create_model(self):
         model = tf.keras.models.Sequential([
             tf.keras.layers.Dense(32, input_shape=(self.env.height * self.env.width,), activation='relu'),
-            tf.keras.layers.Dense(self.env.number_of_colors, activation='softmax'),
+            tf.keras.layers.Dense(self.env.number_of_colors),
         ])
 
         model.build()
@@ -40,9 +40,10 @@ class PolicyGradient:
             logits = self.model(obs)
             color_options = self.env.game.get_color_options()
 
-            action_dist = [logits.numpy()[0, c] for c in color_options]
+            action_dist = [[logits.numpy()[0, c] for c in color_options]]
+
             try:
-                action = np.random.choice(color_options, p=action_dist/sum(action_dist))
+                action = color_options[tf.random.categorical(action_dist, num_samples=1).numpy()[0][0]]
             except ValueError:
                 action = np.random.choice(color_options)
                 print(action_dist)

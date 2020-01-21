@@ -288,47 +288,66 @@ class FillerBoard:
         for cell in filled:
             self.board[cell[0], cell[1]] = color
 
-    def update_filled(self, filled):
+    def update_filled(self, filled_edges, filled_surrounded):
         """
         Updates the list of cells that belong to the player.
+        The edge cells will be checked to see if adjoining cells have the same color.
+        If so, then that cell will be added as an edge cell.
+        If a cell is surrounded by the same color, then it will be moved to the 
+        surrounded cells list and not be checked further.
 
         Parameters
         ----------
-        filled : list
+        filled_edges : list
+            a list of edge cells that belong to the player 
+        filled_surrounded : list
             a list of cells that belong to the player
         """
-        for cell in filled:
+        for cell in filled_edges:
             coord_x = cell[1]
             coord_y = cell[0]
             cell_value = self.get_color(cell)
+            cell_surrounded = True
 
             # up
             if coord_y - 1 >= 0:
                 new_cell = (coord_y-1, coord_x)
                 cell_up_value = self.get_color(new_cell)
-                if cell_value == cell_up_value and new_cell not in filled:
-                    filled.append(new_cell)
+                if cell_value != cell_up_value:
+                    cell_surrounded = False
+                elif new_cell not in filled_edges + filled_surrounded:
+                    filled_edges.append(new_cell)
 
             # down
             if coord_y + 1 < self.height:
                 new_cell = (coord_y+1, coord_x)
                 cell_down_value = self.get_color(new_cell)
-                if cell_value == cell_down_value and new_cell not in filled:
-                    filled.append(new_cell)
+                if cell_value != cell_down_value:
+                    cell_surrounded = False
+                elif new_cell not in filled_edges + filled_surrounded:
+                    filled_edges.append(new_cell)
 
             # left
             if coord_x - 1 >= 0:
                 new_cell = (coord_y, coord_x-1)
                 cell_left_value = self.get_color(new_cell)
-                if cell_value == cell_left_value and new_cell not in filled:
-                    filled.append(new_cell)
+                if cell_value != cell_left_value:
+                    cell_surrounded = False
+                elif new_cell not in filled_edges + filled_surrounded:
+                    filled_edges.append(new_cell)
 
             # right
             if coord_x + 1 < self.width:
                 new_cell = (coord_y, coord_x+1)
                 cell_right_value = self.get_color(new_cell)
-                if cell_value == cell_right_value and new_cell not in filled:
-                    filled.append(new_cell)
+                if cell_value != cell_right_value:
+                    cell_surrounded = False
+                elif new_cell not in filled_edges + filled_surrounded:
+                    filled_edges.append(new_cell)
+
+            if cell_surrounded:
+                filled_surrounded.append(cell)
+                filled_edges.remove(cell)
 
     def get_color_count(self, color, filled):
         """

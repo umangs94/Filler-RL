@@ -22,11 +22,12 @@ class Player:
             the gameboard object
         """
         self.score = 1
-        self.filled = filled
+        self.filled_edges = filled
+        self.filled_surrounded = []
         self.game_board = game_board
 
-        self.color = self.game_board.get_color(self.filled[0])
-        self.game_board.update_filled(self.filled)
+        self.color = self.game_board.get_color(self.filled_edges[0])
+        self.game_board.update_filled(self.filled_edges, self.filled_surrounded)
 
     def play_turn(self, color_options):
         """
@@ -38,9 +39,9 @@ class Player:
             a list of the possible color options (as integers)
         """
         self.color = self.choose_color(color_options)
-        self.game_board.set_color(self.color, self.filled)
-        self.game_board.update_filled(self.filled)
-        self.score = len(self.filled)
+        self.game_board.set_color(self.color, self.filled_edges + self.filled_surrounded)
+        self.game_board.update_filled(self.filled_edges, self.filled_surrounded)
+        self.score = len(self.filled_edges) + len(self.filled_surrounded)
 
     def choose_color(self, color_options):
         """
@@ -104,7 +105,7 @@ class AIPlayer(Player):
             the integer of the best color
         """
         np.random.shuffle(color_options)
-        counts = [self.game_board.get_color_count(color, self.filled.copy()) for color in color_options]
+        counts = [self.game_board.get_color_count(color, self.filled_edges.copy()) for color in color_options]
 
         return color_options[np.argmax(counts)]
 

@@ -23,7 +23,7 @@ class PolicyGradient:
         value = tf.keras.layers.Dense(1)(hidden_layer)
 
         model = tf.keras.Model(inputs=array_input, outputs=[logits, value])
-        model.compile(optimizer=tf.optimizers.Adam(learning_rate=learning_rate),
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
                       loss=[self._logits_loss, self._value_loss])
         print('Model compiled')
 

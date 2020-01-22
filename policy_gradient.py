@@ -5,7 +5,7 @@ from filler import FillerEnv
 
 
 class PolicyGradient:
-    def __init__(self, n_episodes, continue_training=False, gamma=0.9, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
+    def __init__(self, n_episodes, continue_training=False, gamma=0.9, update_after_episodes=10, learning_rate=0.001, images_after_episodes=10):
         self.n_episodes = n_episodes
         self.gamma = gamma
         self.update_after_episodes = update_after_episodes
@@ -44,12 +44,15 @@ class PolicyGradient:
 
         return loss
 
-    def get_action_and_value(self, obs):
+    def get_action_and_value(self, obs, random=False):
         logits, value = self.model.predict(obs)
 
         color_options = self.env.game.get_color_options()
-        action_dist = [[tf.gather(tf.squeeze(logits), c) for c in color_options]]
-        action = color_options[tf.squeeze(tf.random.categorical(action_dist, num_samples=1))]
+        if random:
+            action = np.random.choice(color_options)
+        else:
+            action_dist = [[tf.gather(tf.squeeze(logits), c) for c in color_options]]
+            action = color_options[tf.squeeze(tf.random.categorical(action_dist, num_samples=1))]
 
         return action, tf.squeeze(value)
 
@@ -78,7 +81,7 @@ class PolicyGradient:
             done = False
             while not done:
                 all_obs.append(obs.reshape(-1))
-                action, value = self.get_action_and_value(obs)
+                action, value = self.get_action_and_value(obs, random=e_n < self.update_after_episodes * 2)
                 obs, reward, done = self.env.step(action)
 
                 all_actions.append(action)

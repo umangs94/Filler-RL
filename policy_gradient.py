@@ -14,7 +14,9 @@ class PolicyGradient:
         self.env = FillerEnv(number_of_colors=6, height=8, width=5)
 
         self.model = self.create_model(
-            learning_rate=learning_rate) if not continue_training else tf.keras.models.load_model('model.h5')
+            learning_rate=learning_rate) if not continue_training else \
+            tf.keras.models.load_model('model.h5', custom_objects={"_value_loss": self._value_loss,
+                                                                   "_logits_loss": self._logits_loss})
 
     def create_model(self, learning_rate):
         array_input = tf.keras.layers.Input(shape=(self.env.height * self.env.width,))

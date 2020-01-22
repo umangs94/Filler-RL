@@ -44,8 +44,8 @@ class FillerEnv:
         np.ndarray
             the gameboard in numpy format with shape (height, width)
         """
-        self.game = FillerGame(number_of_colors=self.number_of_colors, height=self.height,
-                               width=self.width, r_l=True, save_images_suffix=save_images_suffix)
+        self.game = FillerGame(number_of_colors=self.number_of_colors, height=self.height, width=self.width,
+                               game_type=FillerGame.game_types['r_l'], save_images_suffix=save_images_suffix)
         return self.get_state()
 
     def get_state(self):
@@ -99,23 +99,28 @@ class FillerGame:
     Implements the game-playing functions.
     """
 
-    def __init__(self, number_of_colors, height, width, automated=False, r_l=False, save_images_suffix=False):
+    game_types = {"vs_ai": 0, "r_l": 1, "human": 2, "random": 3}
+
+    def __init__(self, number_of_colors, height, width, game_type, save_images_suffix=False):
         self.number_of_cells = height * width
         self.all_colors = np.arange(number_of_colors)
-        self.game_board = FillerBoard(number_of_colors, height, width, figure=not r_l)
-        self.automated = automated
-        self.r_l = r_l
+        self.game_type = game_type
         self.save_images_suffix = save_images_suffix
+
+        figure = self.game_type != self.game_types['r_l']
+        self.game_board = FillerBoard(number_of_colors, height, width, figure=figure)
 
         self.turn_count = 0
 
         player_1_starting_cell = (height - 1, 0)
-        if self.automated:
+        if self.game_type == self.game_types['vs_ai']:
             self.player_1 = player.AIPlayer([player_1_starting_cell], self.game_board)
-        elif self.r_l:
+        elif self.game_type == self.game_types['r_l']:
             self.player_1 = player.RLPlayer([player_1_starting_cell], self.game_board)
-        else:
+        elif self.game_type == self.game_types['human']:
             self.player_1 = player.HumanPlayer([player_1_starting_cell], self.game_board)
+        elif self.game_type == self.game_types['random']:
+            self.player_1 = player.RandomPlayer([player_1_starting_cell], self.game_board)
 
         player_2_starting_cell = (0, width - 1)
         self.player_2 = player.AIPlayer([player_2_starting_cell], self.game_board)
@@ -159,7 +164,7 @@ class FillerGame:
     def play_single_turn(self, action=None):
         """
         Completes a single turn by showing the gameboard, playing each of the players' turns, and printing the result.
-        The former and latter are only done if self.r_l is False.
+        The former and latter are only done if the game type is RL.
 
         Parameters
         ----------
@@ -170,16 +175,16 @@ class FillerGame:
         if self.save_images_suffix:
             self.game_board.graphical_output(save=True, display=False,
                                              image_suffix=f'{self.save_images_suffix}_{self.turn_count}')
-        if not (self.r_l or self.automated):
+        if self.game_type == self.game_types['human']:
             self.game_board.graphical_output()
 
         self.player_1.play_turn(action if action else self.get_color_options())
         self.player_2.play_turn(self.get_color_options())
 
-        if self.automated:
+        if self.game_type == self.game_types['vs_ai']:
             self.game_board.graphical_output(save=True, image_suffix=self.turn_count)
 
-        if not self.r_l:
+        if self.game_type != self.game_types['r_l']:
             print(f"player 1 played {self.player_1.color}:  {self.player_1.score}")
             print(f"player 2 played {self.player_2.color}:  {self.player_2.score}")
             print()
@@ -193,15 +198,16 @@ class FillerGame:
         early_finish : bool, optional
             determines whether the game can be finished early, by default False
         """
+        automated = self.game_type == self.game_types['vs_ai']
         while not (self.check_for_end_of_game() or (early_finish and self.check_for_early_finish())):
             self.play_single_turn()
-            if self.automated:
+            if automated:
                 input('Press any key to continue.\n')
 
         if self.player_1.score > self.player_2.score:
-            print("player 1 wins!" if self.automated else "you win!")
+            print("player 1 wins!" if automated else "you win!")
         elif self.player_2.score > self.player_1.score:
-            print("player 2 wins!" if self.automated else "you lose!")
+            print("player 2 wins!" if automated else "you lose!")
         else:
             print("it was a tie!")
         self.game_board.graphical_output(block=True)

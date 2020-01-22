@@ -19,7 +19,7 @@ class PolicyGradient:
                                                                    "_logits_loss": self._logits_loss})
 
     def create_model(self, learning_rate):
-        array_input = tf.keras.layers.Input(shape=(self.env.height * self.env.width,))
+        array_input = tf.keras.layers.Input(shape=(self.env.height * self.env.width + 2,))
         hidden_layer = tf.keras.layers.Dense(15, activation='relu')(array_input)
         logits = tf.keras.layers.Dense(self.env.number_of_colors)(hidden_layer)
         value = tf.keras.layers.Dense(1)(hidden_layer)

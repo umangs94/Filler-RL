@@ -46,7 +46,18 @@ class FillerEnv:
         """
         self.game = FillerGame(number_of_colors=self.number_of_colors, height=self.height,
                                width=self.width, r_l=True, save_images_suffix=save_images_suffix)
-        return self.game.game_board.get_board()
+        return self.get_state()
+
+    def get_state(self):
+        """
+        Returns the current state of the gameboard and the two player's colors.
+
+        Returns
+        -------
+        np.ndarray
+            a flat 1D representation of the gameboard appended by the two players' colors
+        """
+        return np.append(self.game.game_board.get_board(), [self.game.player_1.color, self.game.player_2.color])[None, :]
 
     def step(self, action):
         """
@@ -65,7 +76,7 @@ class FillerEnv:
                 and if the game is over
         """
         self.game.play_single_turn([action])
-        next_obs = self.game.game_board.get_board()
+        next_obs = self.get_state()
         reward = self.game.player_1.score - self.game.turn_count
         done = self.game.check_for_end_of_game() or self.game.turn_count > 25
 
@@ -425,4 +436,4 @@ class FillerBoard:
         np.ndarray
             a flat 1D representation of the gameboard
         """
-        return self.board.reshape(-1, self.height * self.width).copy()
+        return self.board.copy()

@@ -51,7 +51,7 @@ class PolicyGradient:
         action_dist = [[tf.gather(tf.squeeze(logits), c) for c in color_options]]
         action = color_options[tf.squeeze(tf.random.categorical(action_dist, num_samples=1))]
 
-        return action, value[0][0]
+        return action, tf.squeeze(value)
 
     def discount_rewards(self, rewards):
         return [sum([r * self.gamma ** j for j, r in enumerate(rewards[i:])]) for i in range(len(rewards))]

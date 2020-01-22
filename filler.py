@@ -57,7 +57,8 @@ class FillerEnv:
         np.ndarray
             a flat 1D representation of the gameboard appended by the two players' colors
         """
-        return np.append(self.game.game_board.get_board(), [self.game.player_1.color, self.game.player_2.color])[None, :]
+        return np.append(self.game.game_board.get_board(),
+                         [self.game.player_1.color, self.game.player_2.color])[None, :]
 
     def step(self, action):
         """

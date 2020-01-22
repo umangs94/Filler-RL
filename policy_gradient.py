@@ -5,7 +5,7 @@ from filler import FillerEnv
 
 
 class PolicyGradient:
-    def __init__(self, n_episodes, continue_training=False, gamma=0.99, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
+    def __init__(self, n_episodes, continue_training=False, gamma=0.9, update_after_episodes=10, learning_rate=0.01, images_after_episodes=10):
         self.n_episodes = n_episodes
         self.gamma = gamma
         self.update_after_episodes = update_after_episodes
@@ -106,7 +106,7 @@ class PolicyGradient:
                 all_advs = []
                 all_d_rewards = []
 
-                print(f'Episode {e_n}\nAverage Reward: {np.mean(rewards[-self.update_after_episodes:]):.4f}\t' +
+                print(f'Episode {e_n}\tAverage Reward: {np.mean(rewards[-self.update_after_episodes:]):.4f}\t' +
                       f'Average Logit Loss: {np.mean(logit_losses[-self.update_after_episodes:]):.4f}\t' +
                       f'Average Value Loss: {np.mean(value_losses[-self.update_after_episodes:]):.4f}')
             elif not e_n % (self.update_after_episodes/5):

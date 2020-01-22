@@ -66,21 +66,20 @@ class FillerEnv:
         """
         self.game.play_single_turn([action])
         next_obs = self.game.game_board.get_board()
-        diff = self.game.player_1.score - self.game.player_2.score
-        reward = np.sign(diff) * diff ** 2 - self.game.turn_count ** 2
+        reward = self.game.player_1.score - self.game.turn_count
         done = self.game.check_for_end_of_game() or self.game.turn_count > 25
 
         if done:
             if self.game.player_1.score > self.game.player_2.score:
-                reward += 1000
+                reward += 25
             elif self.game.player_2.score > self.game.player_1.score:
-                reward -= 1000
+                reward -= 25
 
             if self.game.save_images_suffix:
                 image_suffix = f'{self.game.save_images_suffix}_{self.game.turn_count+1}'
                 self.game.game_board.graphical_output(save=True, display=False, image_suffix=image_suffix)
 
-        return next_obs, reward/1000, done
+        return next_obs, reward/100, done
 
 
 class FillerGame:

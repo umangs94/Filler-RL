@@ -426,4 +426,4 @@ class FillerBoard:
         np.ndarray
             a flat 1D representation of the gameboard
         """
-        return self.board.reshape(-1, self.height * self.width)
+        return self.board.reshape(-1, self.height * self.width).copy()
